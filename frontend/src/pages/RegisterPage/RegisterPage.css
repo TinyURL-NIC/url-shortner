@@ -1,0 +1,28 @@
+@import "../LoginPage/LoginPage.css";
+
+
+.register-container {
+  position: relative;
+  width: 420px;
+  height: 520px;
+  background: transparent;
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(30px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+  border-radius: 10px;
+  color: white;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.register-box {
+  width: 100%;
+  padding: 40px;
+}
+
+.register-box h1 {
+  font-size: 36px;
+  text-align: center;
+}
