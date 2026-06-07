@@ -3,12 +3,13 @@ package com.urlshortener.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Table(name = "urls")
+@Table(name = "urls", indexes = {
+    @Index(name = "idx_urls_short_code", columnList = "short_code"),
+    @Index(name = "idx_urls_user_id",    columnList = "user_id")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -43,6 +44,5 @@ public class Url {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "url", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ClickAnalytics> clickAnalytics;
+    // ✅ List<ClickAnalytics> REMOVED — query via repository instead
 }
