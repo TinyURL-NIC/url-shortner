@@ -28,7 +28,7 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String password;
+    private String passwordHash;
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
