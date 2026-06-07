@@ -1,6 +1,12 @@
+// import Header from "@/components/Header/Header";
+
+import { BarLoader } from "react-spinners";
+
 function Dashboard() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <>
+    {/* <Header /> */}
+    {/* <div className="min-h-screen flex items-center justify-center">
       <div>
         <h1 className="text-3xl font-bold">
           Dashboard
@@ -10,7 +16,12 @@ function Dashboard() {
           Authentication successful.
         </p>
       </div>
-    </div>
+    </div> */}
+
+      <div>
+        {true && <BarLoader width={"100%"} color="#36d7b7" />}
+      </div>
+    </>
   );
 }
 
