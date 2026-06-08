@@ -1,18 +1,102 @@
 version: '3.9'
 
+# ─────────────────────────────────────────────────────────────────
+#  URL Shortener - Docker Compose (Sprint 1: Local Dev Infrastructure)
+#
+#  Services:
+#    - postgres  : PostgreSQL 16 (persistent storage)
+#    - redis     : Redis 7      (URL cache / fast redirects)
+#    - backend   : Spring Boot 3 + Java 21
+#
+#  Usage:
+#    Start all:          docker compose -f docker/docker-compose.yml up --build
+#    Start infra only:   docker compose -f docker/docker-compose.yml up postgres redis
+#    Stop all:           docker compose -f docker/docker-compose.yml down
+#    Wipe volumes:       docker compose -f docker/docker-compose.yml down -v
+# ─────────────────────────────────────────────────────────────────
+
 services:
+
+  # ── PostgreSQL ─────────────────────────────────────────────────
   postgres:
-    image: postgres:16
+    image: postgres:16-alpine
     container_name: url-shortener-postgres
-    restart: always
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin123
-      POSTGRES_DB: url_shortener
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin123}
+      POSTGRES_DB: ${POSTGRES_DB:-url_shortener}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-admin} -d ${POSTGRES_DB:-url_shortener}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
+  # ── Redis ──────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: url-shortener-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    # Enable Redis persistence (AOF = Append Only File)
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  # ── Spring Boot Backend ────────────────────────────────────────
+  backend:
+    build:
+      context: ../backend      # relative to this docker-compose.yml in /docker/
+      dockerfile: Dockerfile
+    container_name: url-shortener-backend
+    restart: unless-stopped
+    environment:
+      # Override application.yaml values so they work inside Docker
+      # (localhost won't work inside a container — use service names)
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-url_shortener}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-admin}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-admin123}
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      # JWT secret — override in production via .env file
+      JWT_SECRET: ${JWT_SECRET:-changeme_use_a_strong_secret_in_production}
+      # Spring profile: use 'prod' in production
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 60s   # Spring Boot takes time to start
+      retries: 3
+
+# ── Named Volumes ─────────────────────────────────────────────────
 volumes:
   postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+# ── Network ───────────────────────────────────────────────────────
+networks:
+  default:
+    name: url-shortener-network
