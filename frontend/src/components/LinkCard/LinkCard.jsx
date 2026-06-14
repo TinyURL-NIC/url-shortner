@@ -1,0 +1,130 @@
+// LinkCard.jsx
+import { ExternalLink, Copy, Trash2 } from "lucide-react";
+import QR from "../../assets/qr-code.webp";
+
+// `link` shape:
+// { id, title, shortUrl, originalUrl, active, clicks, createdAt }
+const LinkCard = (
+// {Links}
+
+) => {
+  // const { title, shortUrl, originalUrl, active, clicks, createdAt } = link;
+
+  // const handleCopy = () => {
+  //   navigator.clipboard.writeText(`https://${shortUrl}`);
+  // };
+
+  return (
+    <div
+      className="
+        group bg-white rounded-2xl p-5
+        border border-gray-100 shadow-sm
+        hover:shadow-md hover:-translate-y-0.5
+        transition-all duration-200
+      "
+    >
+      <div className="flex flex-col sm:flex-row gap-5">
+
+        {/* ── QR code ─────────────────────────────────────── */}
+        <div className="shrink-0">
+          <img
+            src={QR}
+            // alt={`QR code for ${shortUrl}`}
+            className="h-24 w-24 rounded-xl border border-gray-100 object-cover"
+          />
+        </div>
+
+        {/* ── Main content ────────────────────────────────── */}
+        <div className="flex-1 min-w-0">
+
+          {/* Title + status badge */}
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="text-lg font-bold text-[#08244D]">
+              {/* {title} */}
+title
+            </h3>
+            {/* <span
+              className={`
+                inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold
+                ${active
+                  ? "bg-orange-50 text-orange-600"
+                  : "bg-gray-100 text-gray-500"
+                }
+              `}
+            >
+              {active ? "Active" : "Expired"}
+            </span> */}
+          </div>
+
+          {/* Short URL */}
+          <a
+            // href={`https://${shortUrl}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="
+              inline-flex items-center gap-1 mt-2
+              text-[#F97316] font-medium text-sm
+              hover:underline
+            "
+          >
+            {/* {shortUrl} */}
+            https://shorturl
+            <ExternalLink size={12} className="opacity-60" />
+          </a>
+
+          {/* Original URL */}
+          <p className="mt-1 text-xs text-gray-400 truncate">
+            {/* {originalUrl} */}
+            https://originalUrl
+          </p>
+
+          {/* Stats row */}
+          <div className="mt-4 flex flex-wrap items-center gap-6">
+            <div>
+              <p className="text-xs text-gray-400 font-medium">Clicks</p>
+              <p className="text-sm font-bold text-[#08244D]">
+                {/* {clicks.toLocaleString()} */}
+                40
+              </p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-400 font-medium">Created</p>
+              <p className="text-sm font-bold text-[#08244D]">
+                {/* {createdAt} */}
+                14/06/2026
+
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Action buttons ──────────────────────────────── */}
+        <div className="flex sm:flex-col items-center gap-1 shrink-0">
+          <button
+            // onClick={handleCopy}
+            title="Copy short URL"
+            className="
+              p-2 rounded-lg
+              text-gray-400 hover:text-[#08244D] hover:bg-gray-50
+              transition-colors
+            "
+          >
+            <Copy size={15} />
+          </button>
+          <button
+            title="Delete link"
+            className="
+              p-2 rounded-lg
+              text-gray-400 hover:text-red-500 hover:bg-red-50
+              transition-colors
+            "
+          >
+            <Trash2 size={15} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LinkCard;

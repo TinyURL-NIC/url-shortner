@@ -3,6 +3,7 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 
+
 @custom-variant dark (&:is(.dark *));
 
 /* * {
@@ -19,11 +20,12 @@ html {
 body {
   min-height: 100vh;
   font-family: "Poppins", sans-serif;
-  background: radial-gradient(
+  /* background: radial-gradient(
     circle farthest-corner at 17.6% 50.7%,
     rgba(25, 0, 184, 1) 0%,
     rgba(0, 0, 0, 1) 90%
-  );
+  ); */
+  /* background-color: rgb(156, 153, 153); */
 }
 
 @theme inline {

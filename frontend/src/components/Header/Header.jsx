@@ -20,7 +20,6 @@ const Header = () => {
   return (
     <header className="fixed top-0 z-50 w-full glass border-b border-white/5">
       <nav className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5 shrink-0 group">
           <img
@@ -82,16 +81,22 @@ const Header = () => {
                   className="w-52 bg-slate-900/95 border-slate-700/60 backdrop-blur-xl shadow-2xl shadow-black/40 mt-2"
                 >
                   <DropdownMenuLabel className="pb-1">
-                    <p className="text-sm font-semibold text-white">Aniket Roy</p>
-                    <p className="text-xs text-slate-500 font-normal mt-0.5">aniket@example.com</p>
+                    <p className="text-sm font-semibold text-white">
+                      Aniket Roy
+                    </p>
+                    <p className="text-xs text-slate-500 font-normal mt-0.5">
+                      aniket@example.com
+                    </p>
                   </DropdownMenuLabel>
 
                   <DropdownMenuSeparator className="bg-slate-700/60 my-1" />
 
                   <DropdownMenuGroup>
                     <DropdownMenuItem className="gap-2 text-slate-300 hover:text-white hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer">
-                      <LinkIcon size={14} className="text-blue-400" />
-                      My Links
+                      <Link to="/dashboard" className="flex gap-2">
+                        <LinkIcon size={14} className="text-blue-400" />
+                        My Links
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem className="gap-2 text-slate-300 hover:text-white hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer">
                       <LayoutDashboard size={14} className="text-purple-400" />
