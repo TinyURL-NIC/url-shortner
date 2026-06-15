@@ -664,7 +664,7 @@ const LandingSection = () => {
 
             <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
               <Button
-                onClick={() => navigate("/login")}
+                onClick={() => navigate("/register")}
                 className="
             h-12 px-8 rounded-xl
             bg-[#F97316] hover:bg-[#ea6a0f]

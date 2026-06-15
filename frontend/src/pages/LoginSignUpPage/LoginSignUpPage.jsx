@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import LoginForm from "../../components/auth/LoginForm";
 import RegisterForm from "../../components/auth/RegisterForm";
 import AuthBanner from "../../components/auth/AuthBanner";
 
 const LoginSignUpPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const isLogin = location.pathname === "/login";
+
+  const setIsLogin = (value) => {
+    navigate(value ? "/login" : "/register");
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-white via-orange-50 to-amber-100 px-4 py-10">
