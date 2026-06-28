@@ -1,11 +1,11 @@
-// Dashboard.jsx
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SiteHeader from "@/components/SiteHeader/SiteHeader";
 import LinkCard from "@/components/LinkCard/LinkCard";
+import CreateLinkModal from "@/components/CreateLinkModal/CreateLinkModal";
 
-// ── Mock data ────────────────────────────────────────────────────────────────
+// ── Mock data ────────────
 // Replace with real API data / context values in production.
 const MOCK_USER = {
   name: "Aniket Roy",
@@ -27,7 +27,8 @@ const MOCK_LINKS = [
     id: 2,
     title: "Product Launch",
     shortUrl: "shrtnr.io/launch",
-    originalUrl: "https://myproduct.com/launch-2026?utm_source=shrtnr&utm_medium=social",
+    originalUrl:
+      "https://myproduct.com/launch-2026?utm_source=shrtnr&utm_medium=social",
     active: true,
     clicks: 3891,
     createdAt: "Jun 2, 2026",
@@ -60,15 +61,15 @@ const MOCK_LINKS = [
     createdAt: "Mar 15, 2024",
   },
 ];
-// ─────────────────────────────────────────────────────────────────────────────
 
 function Dashboard() {
   const [activeTab, setActiveTab] = useState("active");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
-  const activeLinks  = MOCK_LINKS.filter((l) => l.active);
+  const activeLinks = MOCK_LINKS.filter((l) => l.active);
   const expiredLinks = MOCK_LINKS.filter((l) => !l.active);
-  const totalClicks  = MOCK_LINKS.reduce((sum, l) => sum + l.clicks, 0);
+  const totalClicks = MOCK_LINKS.reduce((sum, l) => sum + l.clicks, 0);
 
   const displayedLinks = activeTab === "active" ? activeLinks : expiredLinks;
 
@@ -84,8 +85,7 @@ function Dashboard() {
 
       <div className="min-h-screen bg-[#F8F5F0]">
         <div className="max-w-5xl mx-auto px-6 pt-32 pb-16">
-
-          {/* ── Page header ─────────────────────────────────────── */}
+          {/* ── Page header ── */}
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div>
               <h1 className="text-4xl font-bold tracking-tight text-[#08244D]">
@@ -97,6 +97,7 @@ function Dashboard() {
             </div>
 
             <Button
+              onClick={()=>setOpenModal(true)}
               className="
                 self-start flex items-center gap-1.5
                 bg-[#F97316] hover:bg-[#e0641a]
@@ -109,15 +110,18 @@ function Dashboard() {
             </Button>
           </div>
 
-          {/* ── Stat cards ──────────────────────────────────────── */}
+          {/* ── Stat cards ─── */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
-            <StatCard label="Total Links"   value={MOCK_LINKS.length} />
-            <StatCard label="Active Links"  value={activeLinks.length} />
+            <StatCard label="Total Links" value={MOCK_LINKS.length} />
+            <StatCard label="Active Links" value={activeLinks.length} />
             <StatCard label="Expired Links" value={expiredLinks.length} />
-            <StatCard label="Total Clicks"  value={totalClicks.toLocaleString()} />
+            <StatCard
+              label="Total Clicks"
+              value={totalClicks.toLocaleString()}
+            />
           </div>
 
-          {/* ── Tabs ────────────────────────────────────────────── */}
+          {/* ── Tabs ───────── */}
           <div className="mt-12 flex items-center gap-1 w-fit bg-white border border-gray-100 rounded-xl p-1 shadow-sm">
             <TabButton
               isActive={activeTab === "active"}
@@ -135,7 +139,7 @@ function Dashboard() {
             </TabButton>
           </div>
 
-          {/* ── Link list / empty state ──────────────────────────── */}
+          {/* ── Link list / empty state ─────── */}
           <div className="mt-5 flex flex-col gap-4">
             {displayedLinks.length > 0 ? (
               displayedLinks.map((link) => (
@@ -146,12 +150,23 @@ function Dashboard() {
             )}
           </div>
         </div>
+      
+      <CreateLinkModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        onSubmit={(data) => {
+          console.log(data);
+
+          // Later:
+          // axios.post("/api/links", data)
+        }}
+      />
       </div>
     </>
   );
 }
 
-// ── Sub-components ────────────────────────────────────────────────────────────
+// ── Sub-components ────────────
 
 function StatCard({ label, value }) {
   return (
@@ -168,9 +183,10 @@ function TabButton({ isActive, onClick, children, count }) {
       onClick={onClick}
       className={`
         flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
-        ${isActive
-          ? "bg-[#08244D] text-white shadow-sm"
-          : "text-gray-500 hover:text-[#08244D]"
+        ${
+          isActive
+            ? "bg-[#08244D] text-white shadow-sm"
+            : "text-gray-500 hover:text-[#08244D]"
         }
       `}
     >
@@ -214,7 +230,9 @@ function EmptyState() {
           />
         </svg>
       </div>
-      <h3 className="text-lg font-semibold text-[#08244D]">No links here yet</h3>
+      <h3 className="text-lg font-semibold text-[#08244D]">
+        No links here yet
+      </h3>
       <p className="mt-1 text-sm text-gray-400 max-w-xs">
         Create your first shortened link and start tracking clicks in real time.
       </p>
