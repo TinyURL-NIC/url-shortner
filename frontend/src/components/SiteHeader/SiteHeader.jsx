@@ -2,7 +2,7 @@
 import { FaBars } from "react-icons/fa";
 import { IoIosCut } from "react-icons/io";
 import { useNavigate, Link } from "react-router-dom";
-import { LayoutDashboard, Link as LinkIcon, LogOut } from "lucide-react";
+import { LayoutDashboard, /*Link as LinkIcon,*/  LogOut } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -164,7 +164,7 @@ const SiteHeader = ({
                           Dashboard
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
+                      {/* <DropdownMenuItem asChild>
                         <Link
                           to="/dashboard"
                           className="flex items-center gap-2 cursor-pointer"
@@ -172,7 +172,7 @@ const SiteHeader = ({
                           <LinkIcon size={14} />
                           My Links
                         </Link>
-                      </DropdownMenuItem>
+                      </DropdownMenuItem> */}
                     </DropdownMenuGroup>
 
                     <DropdownMenuSeparator />
@@ -187,7 +187,7 @@ const SiteHeader = ({
             )}
           </div>
 
-          {/* ── Mobile hamburger ────────────────────────────────── */}
+          {/* ── Mobile hamburger ───────────────────── */}
           <button
             onClick={onToggleMenu}
             className="md:hidden p-3 rounded-xl border-2 border-amber-500 text-white"
@@ -197,7 +197,7 @@ const SiteHeader = ({
         </div>
       </header>
 
-      {/* ── Mobile menu ───────────────────────────────────────── */}
+      {/* ── Mobile menu ─────────────────────────── */}
       {menuOpen && (
         <div
           className="
@@ -240,12 +240,12 @@ const SiteHeader = ({
               >
                 Dashboard
               </button>
-              <button
+              {/* <button
                 onClick={() => { navigate("/dashboard"); onCloseMenu(); }}
                 className="text-left"
               >
                 My Links
-              </button>
+              </button> */}
               <button className="text-left text-red-500">Logout</button>
             </div>
           )}

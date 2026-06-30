@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import Google from "../../assets/google.png";
+// import Google from "../../assets/google.png";
 
 const RegisterForm = ({ setIsLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +26,7 @@ const RegisterForm = ({ setIsLogin }) => {
       </div>
 
       {/* Social Login */}
-      <div className="grid grid-cols-1 gap-4 mb-6">
+      {/* <div className="grid grid-cols-1 gap-4 mb-6">
         <button
           type="button"
           className="
@@ -59,14 +59,14 @@ const RegisterForm = ({ setIsLogin }) => {
             Continue with Google
           </span>
         </button>
-      </div>
+      </div> */}
 
       {/* Divider */}
-      <div className="flex items-center gap-4 mb-6">
+      {/* <div className="flex items-center gap-4 mb-6">
         <div className="flex-1 border-t border-gray-300" />
         <span className="text-sm text-gray-500">or</span>
         <div className="flex-1 border-t border-gray-300" />
-      </div>
+      </div> */}
 
       <form onSubmit={handleSubmit}>
         {/* Name Fields */}

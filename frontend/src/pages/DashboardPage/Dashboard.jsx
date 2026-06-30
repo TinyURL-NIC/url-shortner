@@ -1,9 +1,11 @@
+//Dashboard.jsx
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SiteHeader from "@/components/SiteHeader/SiteHeader";
 import LinkCard from "@/components/LinkCard/LinkCard";
 import CreateLinkModal from "@/components/CreateLinkModal/CreateLinkModal";
+import SiteFooter from "@/components/SiteFooter/SiteFooter";
 
 // ── Mock data ────────────
 // Replace with real API data / context values in production.
@@ -162,6 +164,8 @@ function Dashboard() {
         }}
       />
       </div>
+      
+      <SiteFooter />
     </>
   );
 }
@@ -247,6 +251,7 @@ function EmptyState() {
         <Plus size={14} />
         Create Link
       </Button>
+      
     </div>
   );
 }

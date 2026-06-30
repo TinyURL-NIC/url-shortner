@@ -1,34 +1,43 @@
 import { ExternalLink, Copy, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import QR from "../../assets/qr-code.webp";
 
 // `link` shape:
 // { id, title, shortUrl, originalUrl, active, clicks, createdAt }
 
 const LinkCard = ({ link }) => {
-  const {
-    title,
-    shortUrl,
-    originalUrl,
-    active,
-    clicks,
-    createdAt,
-  } = link;
+  const { id, title, shortUrl, originalUrl, active, clicks, createdAt } = link;
+  const navigate = useNavigate();
 
-  const handleCopy = () => {
+  // Stop bubbling so these don't trigger the card's onClick
+  const handleCopy = (e) => {
+    e.stopPropagation();
     navigator.clipboard.writeText(`https://${shortUrl}`);
+  };
+
+  const handleDelete = (e) => {
+    e.stopPropagation();
+    // TODO: connect to DELETE /api/links/:id
+    console.log("Delete link", id);
   };
 
   return (
     <div
+      onClick={() => navigate(`/dashboard/link/${id}`)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && navigate(`/dashboard/link/${id}`)}
       className="
         group bg-white rounded-2xl p-5
         border border-gray-100 shadow-sm
         hover:shadow-md hover:-translate-y-0.5
+        cursor-pointer
         transition-all duration-200
       "
     >
       <div className="flex flex-col sm:flex-row gap-5">
-        {/* ── QR code ─────────────────────────────────────── */}
+
+        {/* ── QR code ───────────────────────────────────────── */}
         <div className="shrink-0">
           <img
             src={QR}
@@ -37,33 +46,28 @@ const LinkCard = ({ link }) => {
           />
         </div>
 
-        {/* ── Main content ────────────────────────────────── */}
+        {/* ── Main content ─────────────────────────────────── */}
         <div className="flex-1 min-w-0">
+
           {/* Title + status badge */}
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="text-lg font-bold text-[#08244D]">
-              {title}
-            </h3>
-
+            <h3 className="text-lg font-bold text-[#08244D]">{title}</h3>
             <span
               className={`
                 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold
-                ${
-                  active
-                    ? "bg-orange-50 text-orange-600"
-                    : "bg-gray-100 text-gray-500"
-                }
+                ${active ? "bg-orange-50 text-orange-600" : "bg-gray-100 text-gray-500"}
               `}
             >
               {active ? "Active" : "Expired"}
             </span>
           </div>
 
-          {/* Short URL */}
+          {/* Short URL — stop propagation so the <a> navigates externally, not to analytics */}
           <a
             href={`https://${shortUrl}`}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
             className="
               inline-flex items-center gap-1 mt-2
               text-[#F97316] font-medium text-sm
@@ -75,29 +79,22 @@ const LinkCard = ({ link }) => {
           </a>
 
           {/* Original URL */}
-          <p className="mt-1 text-xs text-gray-400 truncate">
-            {originalUrl}
-          </p>
+          <p className="mt-1 text-xs text-gray-400 truncate">{originalUrl}</p>
 
           {/* Stats row */}
           <div className="mt-4 flex flex-wrap items-center gap-6">
             <div>
               <p className="text-xs text-gray-400 font-medium">Clicks</p>
-              <p className="text-sm font-bold text-[#08244D]">
-                {clicks.toLocaleString()}
-              </p>
+              <p className="text-sm font-bold text-[#08244D]">{clicks.toLocaleString()}</p>
             </div>
-
             <div>
               <p className="text-xs text-gray-400 font-medium">Created</p>
-              <p className="text-sm font-bold text-[#08244D]">
-                {createdAt}
-              </p>
+              <p className="text-sm font-bold text-[#08244D]">{createdAt}</p>
             </div>
           </div>
         </div>
 
-        {/* ── Action buttons ──────────────────────────────── */}
+        {/* ── Action buttons ────────────────────────────────── */}
         <div className="flex sm:flex-col items-center gap-1 shrink-0">
           <button
             onClick={handleCopy}
@@ -112,6 +109,7 @@ const LinkCard = ({ link }) => {
           </button>
 
           <button
+            onClick={handleDelete}
             title="Delete link"
             className="
               p-2 rounded-lg
@@ -122,6 +120,7 @@ const LinkCard = ({ link }) => {
             <Trash2 size={15} />
           </button>
         </div>
+
       </div>
     </div>
   );
